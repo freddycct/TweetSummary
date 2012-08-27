@@ -1,0 +1,243 @@
+package sw;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.PosixParser;
+
+public class KFoldCrossValidation extends InferModel
+{
+	int num_folds;
+	final static int start_k        = 3;
+	final static int end_k          = 25;
+	//final static double start_delta = 1e-3;
+	//final static double end_delta   = 1e-9;
+	//final static double delta       = 1.9254e-7;
+	final static double delta       = 8.0225e-9;
+	//final static double delta = 1e-6;
+	
+	static String opt_folds = "k_folds";
+	
+	public KFoldCrossValidation()
+	{
+		super();
+	}
+	
+	public static void initOptions()
+	{
+		InferModel.initOptions();
+		options.addOption("F", opt_folds, true, "Number of folds for cross validation");
+	}
+	
+	public KFoldCrossValidation(CommandLine cli) 
+	{
+		this();
+		num_folds          = Integer.parseInt(cli.getOptionValue(KFoldCrossValidation.opt_folds));
+		expt_name          = cli.getOptionValue(KFoldCrossValidation.opt_expt);
+		
+		weight_file = cli.getOptionValue(opt_weights);
+		
+		/*
+		String text_ignore = cli.getOptionValue(KFoldCrossValidation.opt_ignore);
+		String [] ignore   = text_ignore.split("[ \t\n\r\f]+");
+		for(String w : ignore)
+		{
+			stop_words.add(w.toLowerCase());
+		}
+		*/
+	}
+	
+	public double validateHeldOutSet(HashSet<Tweet> heldout)
+	{
+		//add the held out test set to model.tweets
+		
+		LinkedList<Tweet> duplicate = new LinkedList<Tweet>(tweets);
+		
+		for(Tweet tweet : heldout)
+		{
+			duplicate.add(tweet);
+		}
+		
+		//sort model.tweets
+		Collections.sort(duplicate);
+		
+		//init the linkedlist chain
+		Tweet prev = null;
+		for(Tweet tweet : duplicate)
+		{
+			if(heldout.contains(tweet))
+			{
+				tweet.init(K, prev);
+				for(int k = 0; k < K; k++)
+				{
+					tweet.local_theta[k] = 0.0;
+					if(prev != null)
+					{
+						tweet.theta[k] = prev.theta[k] * Math.exp(- decay[k] * (tweet.time - prev.time));
+						tweet.sum_theta += tweet.theta[k];
+					}
+					else
+					{
+						tweet.theta[k] = 0.0;
+					}
+				}
+			}
+			prev = tweet;
+		}
+		prev.next = null;
+		
+		//do the inference for these held out test set once only
+		double [] p = new double[K];
+		
+		for(Tweet tweet : heldout)
+		{
+			tweet.initTheta(K, decay);
+				
+			for(NounPhrase np : tweet.nps)
+			{
+				int z = sample(p, tweet, np);
+				np.z = z;
+				
+				tweet.theta[z] += np.getWeight();
+				tweet.local_theta[z] += np.getWeight();
+				
+				tweet.sum_theta += np.getWeight();
+				tweet.sum_local_theta += np.getWeight();
+			}
+		}
+		
+		//compute perplexity for these held out test set
+		double N_d = 0;
+		double log_mle = 0;
+		for(Tweet tweet : heldout)
+		{
+			log_mle += countMLE(tweet);
+			//N_d += tweet.num_words;
+			N_d += tweet.getWeight();
+		}
+		double perplexity = Math.exp(-log_mle/N_d);
+		return perplexity;
+	}
+
+	public static void main(String [] args) throws Exception
+	{
+		PosixParser parser = new PosixParser();
+		initOptions();
+		CommandLine cli = parser.parse(options, args);
+		
+		KFoldCrossValidation model = new KFoldCrossValidation(cli);
+		
+		//first read in the data first
+		int num_folds = model.num_folds;
+		
+		@SuppressWarnings("unchecked")
+		HashSet<Tweet> [] tweets = new HashSet[num_folds];
+		for(int fold = 0; fold < num_folds; fold++)
+		{
+			tweets[fold] = new HashSet<Tweet>();
+		}
+		
+		//now read in the tweets
+		String line;
+		//KFoldCrossValidation model = new KFoldCrossValidation(cli.getOptionValue(KFoldCrossValidation.opt_expt), cli.getOptionValue(KFoldCrossValidation.opt_ignore));
+		
+		//Read in the stop words in the stop word list
+		/*
+		BufferedReader br = new BufferedReader(new FileReader("jar/smart-common-words.txt"));
+		model.addStopWords(br.readLine());
+		br.close();
+		*/
+		//End of Stop Words
+
+		//Read in the weights
+		model.readWeights();
+		//End read of weights
+		
+		//Read in the input file generated
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		while((line=br.readLine())!=null)
+		{
+			String [] tokens = line.split("\t");
+			Tweet tweet      = new Tweet();
+			tweet.status_id  = Long.parseLong(tokens[0]);
+			tweet.user_id    = Integer.parseInt(tokens[1]);
+			tweet.content    = tokens[2];
+			tweet.time       = Long.parseLong(tokens[3]);
+			
+			while((line = br.readLine()).length() > 0)
+			{
+				//NP <tab> topic
+				tokens = line.split("\t");
+				NounPhrase np = new NounPhrase();
+				
+				np.z = Integer.parseInt(tokens[1]);
+				
+				tokens = tokens[0].split("[ ]+");
+				for(String text : tokens)
+				{
+					//if((text.length() > 2 || text.matches("[0-9]+")) && !model.stop_words.contains(text))
+					if(text.length() > 2 || text.matches("[0-9]+"))
+					{
+						//np.addWord(text);
+						np.addWord(text, model.words_weight.get(text));
+					}
+				}
+				tweet.addNP(np);
+			}
+			//choose one of the K folds to add this tweet to...
+			int fold = model.rand.nextInt(num_folds);
+			tweets[fold].add(tweet);
+		}
+		br.close();
+		//End of reading input file
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(String.format("results/%s/perplexity.%dfolds.txt", model.expt_name, num_folds)));
+		//this portion begins the actual loop of performing K-Fold Cross Validation
+		//for(int fold = 0; fold < num_folds; fold++)
+		for(int fold = 0; fold < 1; fold++)
+		{
+			model.tweets    = new LinkedList<Tweet>();
+			//model.words_idf = new HashMap<String, Double>();
+		
+			//exclude tweets in the held-out set
+			for(int i = 0; i < num_folds; i++)
+			{
+				if(fold == i) continue;
+				for(Tweet tweet : tweets[i])
+				{
+					model.tweets.add(tweet);
+				}
+			}
+
+			//Calculate IDF of the words here
+			//model.idf();
+			//End of calculating IDF
+			
+			//iterate through all possible values of the parameters
+			for(int k = start_k; k <= end_k; k++)
+			{
+				model.K = k;
+				//for(double delta = start_delta; delta <= end_delta; delta = delta * 0.1)
+				//{
+					model.decay[k] = delta;
+					model.init();
+					model.infer();
+					
+					double mle        = model.countMLE();
+					double perplexity = model.validateHeldOutSet(tweets[fold]);
+					
+					//print out fold, k, delta, perplexity
+					bw.write(String.format("%d\t%d\t%e\t%f\t%f\n", fold, k, delta, mle, perplexity));
+					bw.flush();
+				//}
+			}
+		}
+		bw.close();
+	}
+}
