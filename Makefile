@@ -228,3 +228,14 @@ infer_gauss_lda:
 find_np:
 	cat $(DIR)/data/tweets/$(DATA)_$(EVENT).txt | java -cp $(CP) np_lda.TagTweets  > $(DIR)/data/tweets/$(EVENT)_init.np
 	cat $(DIR)/data/tweets/$(DATA)_$(EVENT).txt | java -cp $(CP) lda.TagTweets2 > $(DIR)/data/tweets/$(EVENT)_init.lda
+
+compile:
+	mkdir -p bin/
+	javac -d bin/ -cp $(CP) src/org/json/*.java
+	javac -d bin/ -cp $(CP) src/*.java
+	javac -d bin/ -cp $(CP) src/lda/*.java
+	javac -d bin/ -cp $(CP) src/np_lda/*.java
+	javac -d bin/ -cp $(CP) src/decay_lda/*.java
+	javac -d bin/ -cp $(CP) src/gauss_lda/*.java
+	javac -d bin/ -cp $(CP) src/visualize/*.java
+
