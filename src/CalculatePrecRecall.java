@@ -87,6 +87,9 @@ public class CalculatePrecRecall
 		}
 		br.close();
 		
+		//HashMap<String, Integer> ref_1grams = CountNgram.readGrams("/mnt/freddy/data/tweets/sfbay_facebook_ipo.1grams");
+		//HashMap<String, Integer> ref_2grams = CountNgram.readGrams("/mnt/freddy/data/tweets/sfbay_facebook_ipo.2grams");
+		//HashMap<String, Integer> ref_3grams = CountNgram.readGrams("/mnt/freddy/data/tweets/sfbay_facebook_ipo.3grams");
 		HashMap<String, Integer> ref_1grams = CountNgram.readGrams("testset/facebook_ipo.wiki.1grams");
 		HashMap<String, Integer> ref_2grams = CountNgram.readGrams("testset/facebook_ipo.wiki.2grams");
 		HashMap<String, Integer> ref_3grams = CountNgram.readGrams("testset/facebook_ipo.wiki.3grams");
@@ -106,9 +109,10 @@ public class CalculatePrecRecall
 		}
 		
 		br = new BufferedReader(new InputStreamReader(System.in));
-		
+		int c = 0;
 		while((line=br.readLine())!=null)
 		{
+			c++;
 			tokens = line.split("\t");
 			String content = tokens[1];
 			//now find the 1, 2, 3 grams in this line
@@ -133,9 +137,10 @@ public class CalculatePrecRecall
 			
 			for(int n = 0; n < 3; n++)
 			{
-				double recall    = (double) tp[n] / (double) actual[n];
-				double precision = (double) tp[n] / ((double) predicted[n] + 1e-22);
-				System.out.print(String.format("%e\t%e\t", precision, recall));
+				double recall             = (double) tp[n] / (double) actual[n];
+				double precision          = (double) tp[n] / ((double) predicted[n] + 1e-22);
+				double modified_precision = (double) tp[n] / (double) c;
+				System.out.print(String.format("%e\t%e\t%e\t", precision, modified_precision, recall));
 			}
 			System.out.println();
 		}

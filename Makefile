@@ -6,24 +6,34 @@ DIR=/mnt/freddy
 EVENT_LIST=facebook_ipo obamacare japan bp wallstreet
 MODEL_LIST=lda np_lda decay_lda gauss_lda
 
-prec_recall:
-	 #cat /mnt/freddy/results/facebook_ipo/K=8/lda/retrieved_tweets_cleaned.txt       | java -cp $(CP) CalculatePrecRecall | uniq > /mnt/freddy/results/facebook_ipo/K=8/lda/prec_recall.txt &
-	 #cat /mnt/freddy/results/facebook_ipo/K=8/np_lda/retrieved_tweets_cleaned.txt    | java -cp $(CP) CalculatePrecRecall | uniq > /mnt/freddy/results/facebook_ipo/K=8/np_lda/prec_recall.txt &
-	 #cat /mnt/freddy/results/facebook_ipo/K=8/decay_lda/retrieved_tweets_cleaned.txt | java -cp $(CP) CalculatePrecRecall | uniq > /mnt/freddy/results/facebook_ipo/K=8/decay_lda/prec_recall.txt &
-	 #cat /mnt/freddy/results/facebook_ipo/K=8/gauss_lda/retrieved_tweets_cleaned.txt | java -cp $(CP) CalculatePrecRecall | uniq > /mnt/freddy/results/facebook_ipo/K=8/gauss_lda/prec_recall.txt &
-	 #cat /mnt/freddy/results/facebook_ipo/K=8/lda/prec_recall.txt       | java -cp $(CP) CalculatePrecRecall2 | uniq > /mnt/freddy/results/facebook_ipo/K=8/lda/prec_recall_2.txt &
-	 #cat /mnt/freddy/results/facebook_ipo/K=8/np_lda/prec_recall.txt    | java -cp $(CP) CalculatePrecRecall2 | uniq > /mnt/freddy/results/facebook_ipo/K=8/np_lda/prec_recall_2.txt &
-	 #cat /mnt/freddy/results/facebook_ipo/K=8/decay_lda/prec_recall.txt | java -cp $(CP) CalculatePrecRecall2 | uniq > /mnt/freddy/results/facebook_ipo/K=8/decay_lda/prec_recall_2.txt &
-	 #cat /mnt/freddy/results/facebook_ipo/K=8/gauss_lda/prec_recall.txt | java -cp $(CP) CalculatePrecRecall2 | uniq > /mnt/freddy/results/facebook_ipo/K=8/gauss_lda/prec_recall_2.txt &
-	 #uniq /mnt/freddy/results/facebook_ipo/K=8/lda/prec_recall_2.txt       | java -cp $(CP) CalculatePrecRecall3 > results/facebook_ipo/K=8/lda/prec_recall_3.txt &
-	 #uniq /mnt/freddy/results/facebook_ipo/K=8/np_lda/prec_recall_2.txt    | java -cp $(CP) CalculatePrecRecall3 > results/facebook_ipo/K=8/np_lda/prec_recall_3.txt &
-	 #uniq /mnt/freddy/results/facebook_ipo/K=8/decay_lda/prec_recall_2.txt | java -cp $(CP) CalculatePrecRecall3 > results/facebook_ipo/K=8/decay_lda/prec_recall_3.txt &
-	 #uniq /mnt/freddy/results/facebook_ipo/K=8/gauss_lda/prec_recall_2.txt | java -cp $(CP) CalculatePrecRecall3 > results/facebook_ipo/K=8/gauss_lda/prec_recall_3.txt &
+prec_recall1:
+	cat $(DIR)/results/facebook_ipo/K=8/lda/retrieved_tweets_cleaned.txt       | java -cp $(CP) CalculatePrecRecall | uniq > $(DIR)/results/facebook_ipo/K=8/lda/prec_recall.txt &
+	cat $(DIR)/results/facebook_ipo/K=8/np_lda/retrieved_tweets_cleaned.txt    | java -cp $(CP) CalculatePrecRecall | uniq > $(DIR)/results/facebook_ipo/K=8/np_lda/prec_recall.txt &
+	cat $(DIR)/results/facebook_ipo/K=8/decay_lda/retrieved_tweets_cleaned.txt | java -cp $(CP) CalculatePrecRecall | uniq > $(DIR)/results/facebook_ipo/K=8/decay_lda/prec_recall.txt &
+	cat $(DIR)/results/facebook_ipo/K=8/gauss_lda/retrieved_tweets_cleaned.txt | java -cp $(CP) CalculatePrecRecall | uniq > $(DIR)/results/facebook_ipo/K=8/gauss_lda/prec_recall.txt &
+
+prec_recall2:
+	cat $(DIR)/results/facebook_ipo/K=8/lda/prec_recall.txt       | java -cp $(CP) CalculatePrecRecall2 | uniq > $(DIR)/results/facebook_ipo/K=8/lda/prec_recall_2.txt &
+	cat $(DIR)/results/facebook_ipo/K=8/np_lda/prec_recall.txt    | java -cp $(CP) CalculatePrecRecall2 | uniq > $(DIR)/results/facebook_ipo/K=8/np_lda/prec_recall_2.txt &
+	cat $(DIR)/results/facebook_ipo/K=8/decay_lda/prec_recall.txt | java -cp $(CP) CalculatePrecRecall2 | uniq > $(DIR)/results/facebook_ipo/K=8/decay_lda/prec_recall_2.txt &
+	cat $(DIR)/results/facebook_ipo/K=8/gauss_lda/prec_recall.txt | java -cp $(CP) CalculatePrecRecall2 | uniq > $(DIR)/results/facebook_ipo/K=8/gauss_lda/prec_recall_2.txt &
+
+prec_recall3:
+	cat $(DIR)/results/facebook_ipo/K=8/lda/prec_recall_2.txt       | java -cp $(CP) CalculatePrecRecall3 > results/facebook_ipo/K=8/lda/prec_recall_3.txt &
+	cat $(DIR)/results/facebook_ipo/K=8/np_lda/prec_recall_2.txt    | java -cp $(CP) CalculatePrecRecall3 > results/facebook_ipo/K=8/np_lda/prec_recall_3.txt &
+	cat $(DIR)/results/facebook_ipo/K=8/decay_lda/prec_recall_2.txt | java -cp $(CP) CalculatePrecRecall3 > results/facebook_ipo/K=8/decay_lda/prec_recall_3.txt &
+	cat $(DIR)/results/facebook_ipo/K=8/gauss_lda/prec_recall_2.txt | java -cp $(CP) CalculatePrecRecall3 > results/facebook_ipo/K=8/gauss_lda/prec_recall_3.txt &
 
 json_search:
 	for file in `cat remaining_files.txt` ; do \
-		cat /home/freddy/data/www.ark.cs.cmu.edu/tweets/raw_hose/$${file} | zcat | java -cp $(CP) JSONSearch | ssh freddy@freddy.socialrankr.net "cat >> /mnt/freddy/data/josh_users.json" ; \
+		cat /home/freddy/data/www.ark.cs.cmu.edu/tweets/raw_hose/$${file} | zcat | java -cp $(CP) JSONSearch | ssh freddy@freddy.socialrankr.net "cat >> $(DIR)/data/josh_users.json" ; \
 		echo $${file} >> processed_files.txt ; \
+	done
+
+ngrams_corpus:
+	n=1 ; while [[ $$n -le 3 ]]; do \
+		cut -d $$'\t' -f 3 $(DIR)/data/tweets/sfbay_facebook_ipo.txt | bin/opennlp SimpleTokenizer | java -cp $(CP) GetNgram $${n} | sort | java -cp $(CP) Reduce > $(DIR)/data/tweets/sfbay_facebook_ipo.$${n}grams ; \
+		(( n = n + 1 )); \
 	done
 
 ngrams_wiki:
@@ -70,10 +80,12 @@ summarize_all:
 		(( k = k + 1 )) ; \
 	done
 
+#summarize the tweets using all the models and find their scores
 summarize: ngrams_tweets count_ngrams
 	mkdir -p results/$(EVENT)/K=$(K)
 	java -cp $(CP) Bleu $(DIR) $(EVENT) $(K) > results/$(EVENT)/K=$(K)/coherent_bleu.txt
 
+#delete deprecated files
 rm_files:
 	for event in $(EVENT_LIST); do \
 		k=4 ; while [[ $${k} -le 12 ]]; do \
@@ -81,21 +93,25 @@ rm_files:
 				#mv results/$${event}/K=$${k}/$${model}/distribution.txt	$(DIR)/results/$${event}/K=$${k}/$${model}/ ; \
 				#mv results/$${event}/K=$${k}/$${model}/time.txt $(DIR)/results/$${event}/K=$${k}/$${model}/ ; \
 				#rm -rf $(DIR)/results/$${event}/K=$${k}/$${model}/kappa=* ; \
-				rm results/$${event}/K=$${k}/kappa=*_summary.* results/$${event}/K=$${k}/score_*.txt ; \
+				#rm results/$${event}/K=$${k}/kappa=*_summary.* results/$${event}/K=$${k}/score_*.txt ; \
 			done ; \
 			(( k = k + 1 )); \
 		done ; \
 	done
 
+#Look for more tweets from the original corpus using the "trained" model
 search_gauss_lda:
 	cat $(TWEETS) | java -cp $(CP) gauss_lda.StreamSearch --prefix_dir=$(DIR) --num_topics=$(K) --decay=$(DECAY) --experiment_name=$(EVENT) --ignore_words="$(IGNORE)" > $(DIR)/results/$(EVENT)/K=$(K)/gauss_lda/retrieved_tweets.txt
 
+#Look for more tweets from the original corpus using the "trained" model
 search_decay_lda:
 	cat $(TWEETS) | java -cp $(CP) decay_lda.StreamSearch --prefix_dir=$(DIR) --num_topics=$(K) --decay=$(DECAY) --experiment_name=$(EVENT) --ignore_words="$(IGNORE)" > $(DIR)/results/$(EVENT)/K=$(K)/decay_lda/retrieved_tweets.txt
 
+#Look for more tweets from the original corpus using the "trained" model
 search_np_lda:
 	cat $(TWEETS) | java -cp $(CP) np_lda.StreamSearch --prefix_dir=$(DIR) --num_topics=$(K) --experiment_name=$(EVENT) --ignore_words="$(IGNORE)" > $(DIR)/results/$(EVENT)/K=$(K)/np_lda/retrieved_tweets.txt
 
+#Look for more tweets from the original corpus using the "trained" model
 search_lda:
 	cat $(TWEETS) | java -cp $(CP) lda.StreamSearch --prefix_dir=$(DIR) --num_topics=$(K) --experiment_name=$(EVENT) --ignore_words="$(IGNORE)" > $(DIR)/results/$(EVENT)/K=$(K)/lda/retrieved_tweets.txt
 
@@ -103,6 +119,7 @@ infer_all: infer_lda infer_np_lda infer_decay_lda infer_gauss_lda
 
 load_all: load_lda load_np_lda load_decay_lda load_gauss_lda
 
+#Loads the model without additional training
 load_lda: 
 	mkdir -p $(DIR)/results/$(EVENT)/K=$(K)/lda/
 	cat $(DIR)/data/tweets/$(EVENT)_K=$(K).lda | java -cp $(CP) lda.InferModel --iterations=0 --prefix_dir=$(DIR) --num_topics=$(K) --experiment_name=$(EVENT) --ignore_words="$(IGNORE)"
@@ -114,6 +131,7 @@ load_lda:
 	cut -d $$'\t' -f 1 $(DIR)/results/$(EVENT)/K=$(K)/lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/lda/distribution.txt
 	cut -d $$'\t' -f 4 $(DIR)/results/$(EVENT)/K=$(K)/lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/lda/time.txt
 
+#Loads the model without additional training
 load_np_lda:
 	mkdir -p $(DIR)/results/$(EVENT)/K=$(K)/np_lda/
 	cat $(DIR)/data/tweets/$(EVENT)_K=$(K).np_lda | java -cp $(CP) np_lda.InferModel --iterations=0 --prefix_dir=$(DIR) --num_topics=$(K) --experiment_name=$(EVENT) --ignore_words="$(IGNORE)"
@@ -124,7 +142,8 @@ load_np_lda:
 	done
 	cut -d $$'\t' -f 1 $(DIR)/results/$(EVENT)/K=$(K)/np_lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/np_lda/distribution.txt
 	cut -d $$'\t' -f 4 $(DIR)/results/$(EVENT)/K=$(K)/np_lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/np_lda/time.txt
-	
+
+#Loads the model without additional training
 load_decay_lda:
 	mkdir -p $(DIR)/results/$(EVENT)/K=$(K)/decay_lda/
 	cat $(DIR)/data/tweets/$(EVENT)_K=$(K).decay_lda | java -cp $(CP) decay_lda.InferModel --iterations=0 --prefix_dir=$(DIR) --num_topics=$(K) --decay=$(DECAY) --experiment_name=$(EVENT) --ignore_words="$(IGNORE)"
@@ -136,6 +155,7 @@ load_decay_lda:
 	cut -d $$'\t' -f 1 $(DIR)/results/$(EVENT)/K=$(K)/decay_lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/decay_lda/distribution.txt
 	cut -d $$'\t' -f 4 $(DIR)/results/$(EVENT)/K=$(K)/decay_lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/decay_lda/time.txt
 
+#Loads the model without additional training
 load_gauss_lda:
 	mkdir -p results/$(EVENT)/K=$(K)/gauss_lda/
 	mkdir -p $(DIR)/results/$(EVENT)/K=$(K)/gauss_lda/
@@ -148,6 +168,7 @@ load_gauss_lda:
 	cut -d $$'\t' -f 1 $(DIR)/results/$(EVENT)/K=$(K)/gauss_lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/gauss_lda/distribution.txt
 	cut -d $$'\t' -f 4 $(DIR)/results/$(EVENT)/K=$(K)/gauss_lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/gauss_lda/time.txt
 
+#Inference for LDA (Topic Model)
 infer_lda:
 	mkdir -p results/$(EVENT)/K=$(K)/lda/
 	mkdir -p $(DIR)/results/$(EVENT)/K=$(K)/lda/
@@ -161,6 +182,7 @@ infer_lda:
 	cut -d $$'\t' -f 1 $(DIR)/results/$(EVENT)/K=$(K)/lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/lda/distribution.txt
 	cut -d $$'\t' -f 4 $(DIR)/results/$(EVENT)/K=$(K)/lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/lda/time.txt
 
+#Inference for NounPhrases + Topic Model
 infer_np_lda:
 	mkdir -p results/$(EVENT)/K=$(K)/np_lda/
 	mkdir -p $(DIR)/results/$(EVENT)/K=$(K)/np_lda/
@@ -173,7 +195,8 @@ infer_np_lda:
 	done
 	cut -d $$'\t' -f 1 $(DIR)/results/$(EVENT)/K=$(K)/np_lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/np_lda/distribution.txt
 	cut -d $$'\t' -f 4 $(DIR)/results/$(EVENT)/K=$(K)/np_lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/np_lda/time.txt
-	
+
+#Inference for the Decay Topic Model
 infer_decay_lda:
 	mkdir -p results/$(EVENT)/K=$(K)/decay_lda/
 	mkdir -p $(DIR)/results/$(EVENT)/K=$(K)/decay_lda/
@@ -187,6 +210,7 @@ infer_decay_lda:
 	cut -d $$'\t' -f 1 $(DIR)/results/$(EVENT)/K=$(K)/decay_lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/decay_lda/distribution.txt
 	cut -d $$'\t' -f 4 $(DIR)/results/$(EVENT)/K=$(K)/decay_lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/decay_lda/time.txt
 
+#Inference for the Gaussian Topic Model
 infer_gauss_lda:
 	mkdir -p results/$(EVENT)/K=$(K)/gauss_lda/
 	mkdir -p $(DIR)/results/$(EVENT)/K=$(K)/gauss_lda/
@@ -200,6 +224,7 @@ infer_gauss_lda:
 	cut -d $$'\t' -f 1 $(DIR)/results/$(EVENT)/K=$(K)/gauss_lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/gauss_lda/distribution.txt
 	cut -d $$'\t' -f 4 $(DIR)/results/$(EVENT)/K=$(K)/gauss_lda/transition.txt > $(DIR)/results/$(EVENT)/K=$(K)/gauss_lda/time.txt
 
+#This rule is for tokenizing and finding noun phrases in tweets
 find_np:
 	cat $(DIR)/data/tweets/$(DATA)_$(EVENT).txt | java -cp $(CP) np_lda.TagTweets  > $(DIR)/data/tweets/$(EVENT)_init.np
 	cat $(DIR)/data/tweets/$(DATA)_$(EVENT).txt | java -cp $(CP) lda.TagTweets2 > $(DIR)/data/tweets/$(EVENT)_init.lda
