@@ -44,7 +44,8 @@ public class StreamSearch extends InferModel<Tweet, Topic>
 			if(tweet.content.trim().length() <= 2)
 				continue;
 			
-			List<String> nps = TagTweets2.findNPs(tagger, lexer, tweet.content);
+			//List<String> nps = TagTweets2.findNPs(tagger, lexer, tweet.content);
+			List<String> nps = TagTweets2.findNPs(tagger, tweet.content);
 			for(String text : nps)
 			{
 				if( ( (text.matches("[$A-Za-z0-9%]+") && text.length() > 2) || text.matches("[0-9]+") ) && !stop_words.contains(text) )
