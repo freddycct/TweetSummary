@@ -8,27 +8,27 @@ import java.util.List;
 
 import newalgo.Tagger;
 import newalgo.Tagger.TaggedToken;
-import np_lda.NPLexer;
 
 public class TagTweets2 
 {
 	Tagger tagger;
-	NPLexer lexer;
+	//NPLexer lexer;
 	
 	public TagTweets2() throws Exception
 	{
 		tagger = new Tagger();
 		String modelFilename = "jar/model.alldata.gz";
 		tagger.loadModel(modelFilename);
-		lexer = new NPLexer();
+		//lexer = new NPLexer();
 	}
 	
 	public List<String> findNPs(String content) throws IOException
 	{
-		return findNPs(this.tagger, this.lexer, content);
+		//return findNPs(this.tagger, this.lexer, content);
+		return findNPs(this.tagger, content);
 	}
 	
-	public static List<String> findNPs(Tagger tagger, NPLexer lexer, String content) throws IOException
+	public static List<String> findNPs(Tagger tagger, String content) throws IOException
 	{
 		List<TaggedToken> taggedTokens = tagger.tokenizeAndTag(content);
 		//Get Tokens
