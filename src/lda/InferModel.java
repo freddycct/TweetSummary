@@ -17,7 +17,7 @@ import java.util.Map.Entry;
 import lda.MTRandom;
 
 import newalgo.Tagger;
-import np_lda.NPLexer;
+//import np_lda.NPLexer;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -355,7 +355,7 @@ public class InferModel<TweetType extends Tweet, TopicType extends Topic>
 		Tagger tagger = new Tagger();
 		String modelFilename = "jar/model.alldata.gz";
 		tagger.loadModel(modelFilename);
-		NPLexer lexer = new NPLexer();
+		//NPLexer lexer = new NPLexer();
 		
 		double [] p = new double[K];
 		double squared_error = 0;
@@ -370,7 +370,8 @@ public class InferModel<TweetType extends Tweet, TopicType extends Topic>
 			tweet.content = tokens[1];
 			
 			//only extract unigrams
-			List<String> nps = TagTweets2.findNPs(tagger, lexer, tweet.content);
+			//List<String> nps = TagTweets2.findNPs(tagger, lexer, tweet.content);
+			List<String> nps = TagTweets2.findNPs(tagger, tweet.content);
 			for(String text : nps)
 			{
 				if( ( (text.matches("[$A-Za-z0-9%]+") && text.length() > 2) || text.matches("[0-9]+") ) && !stop_words.contains(text) )

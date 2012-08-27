@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import newalgo.Tagger;
-import np_lda.NPLexer;
+//import np_lda.NPLexer;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.PosixParser;
@@ -24,7 +24,7 @@ public class StreamSearch extends InferModel<Tweet, Topic>
 		Tagger tagger = new Tagger();
 		String modelFilename = "jar/model.alldata.gz";
 		tagger.loadModel(modelFilename);
-		NPLexer lexer = new NPLexer();
+		//NPLexer lexer = new NPLexer();
 		
 		double [] p = new double[K];
 		
