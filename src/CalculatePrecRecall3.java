@@ -11,7 +11,7 @@ public class CalculatePrecRecall3
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		while((line=br.readLine())!=null)
 		{
-			if((n % 10000) == 0)
+			if((n % 1000) == 0)
 			{
 				System.out.println(line);
 			}
