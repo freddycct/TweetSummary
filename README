@@ -2,3 +2,7 @@ TweetSummary
 ============
 
 1) type "make compile"
+2) type "./run --experiment_name=<some name> --iterations=<how long do you want to run it for> --num_topics=<# of topics you want>"
+
+e.g.
+./run.sh --experiment_name=test --iterations=10 --num_topics=5
