@@ -35,7 +35,7 @@ public class InferModel<TopicType extends Topic> extends np_lda.InferModel<Tweet
 	public InferModel(CommandLine cli) throws Exception
 	{
 		super(cli);
-		double tmp_decay = Double.parseDouble(cli.getOptionValue(opt_decay));
+		double tmp_decay = cli.hasOption(opt_decay) ? Double.parseDouble(cli.getOptionValue(opt_decay)) : -Math.log(0.5) / (60*60);
 		decay = new double[K];
 		
 		for(int k=0;k<K;k++)
