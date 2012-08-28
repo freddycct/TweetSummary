@@ -1,11 +1,7 @@
 clear;
 close all;
 
-models = {'lda', 'np_lda', 'decay_lda', 'gauss_lda'};
-model_names = {'LDA', 'NP LDA', 'Decayed LDA', 'Gaussian LDA'};
-lines = [ 1, 257, 180, 119, 98 ];
-events = {'facebook_ipo', 'obamacare', 'japan', 'bp', 'wallstreet'};
-event_names = {'Facebook IPO', 'Obamacare', 'Japan Earthquake', 'BP Oil Spill', 'Occupy Wall Street'};
+init_names;
 
 K = 5:10;
 scores = zeros(length(models), length(K));

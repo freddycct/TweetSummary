@@ -1,11 +1,7 @@
 clear;
 close all;
 
-%data   = {'sfbay', 'sfbay', 'gardenhose', 'gardenhose'};
-
-models = {'lda', 'np_lda', 'decay_lda', 'gauss_lda'};
-events = {'facebook_ipo', 'obamacare', 'japan', 'bp', 'wallstreet'};
-event_names = {'Facebook IPO', 'Samsung Galaxy SIII', 'Obamacare', 'Japan Earthquake'};
+init_names;
 
 e = 1;
 m = 4;
