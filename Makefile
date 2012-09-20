@@ -3,7 +3,8 @@ LC_ALL=C
 CP=bin:jar/mysql-connector-java-5.1.20-bin.jar:jar/JFlex.jar:jar/ark-1.0-SNAPSHOT.jar:jar/commons-cli-1.2.jar:jar/commons-math3-3.0.jar:jar/opencsv-2.3.jar
 DIR=/mnt/freddy
 
-EVENT_LIST=facebook_ipo obamacare japan bp wallstreet
+EVENT_LIST=obamacare japan bp wallstreet
+#EVENT_LIST=facebook_ipo obamacare japan bp wallstreet
 MODEL_LIST=lda np_lda decay_lda gauss_lda
 
 prec_recall1:
@@ -23,12 +24,6 @@ prec_recall3:
 	cat $(DIR)/results/facebook_ipo/K=8/np_lda/prec_recall_2.txt    | java -cp $(CP) CalculatePrecRecall3 > results/facebook_ipo/K=8/np_lda/prec_recall_3.txt &
 	cat $(DIR)/results/facebook_ipo/K=8/decay_lda/prec_recall_2.txt | java -cp $(CP) CalculatePrecRecall3 > results/facebook_ipo/K=8/decay_lda/prec_recall_3.txt &
 	cat $(DIR)/results/facebook_ipo/K=8/gauss_lda/prec_recall_2.txt | java -cp $(CP) CalculatePrecRecall3 > results/facebook_ipo/K=8/gauss_lda/prec_recall_3.txt &
-
-json_search:
-	for file in `cat remaining_files.txt` ; do \
-		cat /home/freddy/data/www.ark.cs.cmu.edu/tweets/raw_hose/$${file} | zcat | java -cp $(CP) JSONSearch | ssh freddy@freddy.socialrankr.net "cat >> $(DIR)/data/josh_users.json" ; \
-		echo $${file} >> processed_files.txt ; \
-	done
 
 ngrams_corpus:
 	n=1 ; while [[ $$n -le 3 ]]; do \
@@ -88,12 +83,10 @@ summarize: ngrams_tweets count_ngrams
 #delete deprecated files
 rm_files:
 	for event in $(EVENT_LIST); do \
-		k=4 ; while [[ $${k} -le 12 ]]; do \
+		k=8 ; while [[ $${k} -le 8 ]]; do \
 			for model in $(MODEL_LIST); do \
-				#mv results/$${event}/K=$${k}/$${model}/distribution.txt	$(DIR)/results/$${event}/K=$${k}/$${model}/ ; \
-				#mv results/$${event}/K=$${k}/$${model}/time.txt $(DIR)/results/$${event}/K=$${k}/$${model}/ ; \
-				#rm -rf $(DIR)/results/$${event}/K=$${k}/$${model}/kappa=* ; \
-				#rm results/$${event}/K=$${k}/kappa=*_summary.* results/$${event}/K=$${k}/score_*.txt ; \
+				mv $(DIR)/results/$${event}/K=$${k}/$${model}/distribution.txt results/$${event}/K=$${k}/$${model}/ ; \
+				mv $(DIR)/results/$${event}/K=$${k}/$${model}/time.txt results/$${event}/K=$${k}/$${model}/ ; \
 			done ; \
 			(( k = k + 1 )); \
 		done ; \

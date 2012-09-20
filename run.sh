@@ -8,6 +8,6 @@ echo arg2:$2
 echo arg3:$3 
 echo arg4:$4
 
-cat /mnt/freddy/data/tweets/sfbay_facebook_ipo.txt | java -cp ${CP} np_lda.TagTweets > /mnt/freddy/data/tweets/facebook_ipo_init.np
+#cat /mnt/freddy/data/tweets/sfbay_facebook_ipo.txt | java -cp ${CP} np_lda.TagTweets > /mnt/freddy/data/tweets/facebook_ipo_init.np
 cat /mnt/freddy/data/tweets/facebook_ipo_init.np   | java -cp ${CP} visualize.Main $1 $2 $3 $4
 

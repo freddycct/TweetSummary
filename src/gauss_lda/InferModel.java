@@ -43,7 +43,9 @@ public class InferModel extends decay_lda.InferModel<Topic>
 		//double t = nd.inverseCumulativeProbability(0.25);
 		//t = (topics[k].getMean() - t);
 		//decay[k] = - Math.log(0.5)/t;
-		decay[k] = Math.sqrt(-2 * topics[k].getVar() * Math.log(0.5));
+		//decay[k] = Math.sqrt(-2 * topics[k].getVar() * Math.log(0.5));
+		//decay[k] = - Math.log(0.5)
+		decay[k] = Math.log(2) / Math.sqrt(2 * topics[k].getVar() * Math.log(2));
 	}
 
 	public void inferDecay()

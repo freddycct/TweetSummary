@@ -5,6 +5,8 @@ public class MTurkAnalysis
 {
 	public static void main(String [] args) throws Exception
 	{
+		//Change the order to be consistent with matlab
+		//String [] events = { "facebook_ipo", "obamacare", "japan", "bp", "wallstreet" };
 		String [] events = { "bp", "facebook_ipo", "japan", "obamacare", "wallstreet" };
 		int num_events = events.length;
 		int [][] scores = new int [num_events][4];
